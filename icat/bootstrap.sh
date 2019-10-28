@@ -51,6 +51,9 @@ if [[ ! -e /var/run/irods_installed ]]; then
     # Change default resource to rootResc for irods-user
     sed -i 's/\"irods_default_resource\"\:\ \"demoResc\"\,/\"irods_default_resource\"\:\ \"rootResc\"\,/' /var/lib/irods/.irods/irods_environment.json
 
+    # Add storage tiering plugin config to server config
+    /opt/irods/prepend_tiering_plugin.py /etc/irods/server_config.json
+
     touch /var/run/irods_installed
 
 else

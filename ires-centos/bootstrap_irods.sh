@@ -38,3 +38,18 @@ done
 ##########
 ## Special
 
+imeta set -R replRescAZM01 irods::storage_tiering::group example_group 1
+imeta add -R replRescAZM01 irods::storage_tiering::group undo_group 0
+imeta set -R replRescAZM01 irods::storage_tiering::time 9999999999
+imeta add -R replRescAZM01 irods::storage_tiering::verification checksum
+
+iadmin asq "SELECT R_DATA_MAIN.data_name, R_COLL_MAIN.coll_name, R_DATA_MAIN.data_owner_name, R_DATA_MAIN.data_repl_num  from  R_DATA_MAIN,  R_COLL_MAIN WHERE R_DATA_MAIN.data_owner_name = 'rods'AND R_DATA_MAIN.coll_id = R_COLL_MAIN.coll_id AND R_COLL_MAIN.coll_name LIKE ANY (SELECT concat(R_COLL_MAIN.coll_name,'/%') from R_OBJT_METAMAP, R_COLL_MAIN, R_META_MAIN WHERE R_META_MAIN.meta_attr_name= 'tiering' AND R_COLL_MAIN.coll_id = R_OBJT_METAMAP.object_id AND R_OBJT_METAMAP.meta_id = R_META_MAIN.meta_id) " archive_query
+imeta set -R replRescAZM01 irods::storage_tiering::query archive_query specific
+
+icd /nlmumc/projects/P000000012
+imkdir C000000001
+
+
+iput -R replRescUM01 /rules/tests/README.md /nlmumc/projects/P000000010/C000000001
+iput -R replRescUM01 /rules/tests/README.md /nlmumc/projects/P000000011/C000000001
+iput -R replRescUM01 /rules/tests/README.md /nlmumc/projects/P000000012/C000000001

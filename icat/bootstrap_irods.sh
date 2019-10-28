@@ -149,3 +149,6 @@ ichmod -r read "rit-l" /nlmumc/projects/P000000011
 imeta add -C /nlmumc/projects/P000000011/C000000001 creator irods_bootstrap@docker.dev
 imeta add -C /nlmumc/projects/P000000011/C000000001 dcat:byteSize 0
 imeta add -C /nlmumc/projects/P000000011/C000000001 numFiles 0
+# Add additional storage-tiering AVUs
+imeta add -C  /nlmumc/projects/P000000010 tiering true
+imeta add -C  /nlmumc/projects/P000000011 tiering true

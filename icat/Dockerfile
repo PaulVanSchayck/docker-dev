@@ -56,7 +56,8 @@ RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add - 
     irods-icommands=${IRODS_VERSION} \
     # packages required for building microservices
     irods-externals-clang-runtime${ENV_IRODS_EXT_CLANG_RUNTIME_VERSION} \
-    irods-externals-clang${ENV_IRODS_EXT_CLANG_VERSION}
+    irods-externals-clang${ENV_IRODS_EXT_CLANG_VERSION} \
+    irods-rule-engine-plugin-unified-storage-tiering
 
 # install Metalnx RMD
 ADD ./emc-metalnx-rmd-1.0-1.deb /tmp/emc-metalnx-rmd-1.0-1.deb
@@ -77,8 +78,11 @@ ADD ./setupdb.sh /opt/irods/setupdb.sh
 ADD ./bootstrap.sh /opt/irods/bootstrap.sh
 ADD ./bootstrap_irods.sh /opt/irods/bootstrap_irods.sh
 ADD ./prepend_ruleset.py /opt/irods/prepend_ruleset.py
+ADD ./prepend_tiering_plugin.py /opt/irods/prepend_tiering_plugin.py
 ADD ./add_env_var.py /opt/irods/add_env_var.py
 RUN chmod a+x /opt/irods/*
+ADD ./example_unified_tiering_invocation.r /rules/tests/example_unified_tiering_invocation.r
+ADD ./undo_unified_tiering_invocation.r /rules/tests/undo_unified_tiering_invocation.r
 
 EXPOSE 1248 1247 8000
 VOLUME [ "/rules", "/helpers", "/microservices" ]
