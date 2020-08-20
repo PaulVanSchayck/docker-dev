@@ -32,6 +32,7 @@ RUN yum install -y \
     # packages required for building ruleset and microservices {{
     openssl-devel \
     libcurl-devel \
+    jansson-devel \
     gcc-c++ \
     make \
     rpm-build \
