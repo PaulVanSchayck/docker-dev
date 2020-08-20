@@ -33,6 +33,7 @@ RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/a
     libc++-dev \
     # packages required for building ruleset and microservices {{
     libssl-dev \
+    libjansson-dev \
     g++ \
     make \
     cmake \
