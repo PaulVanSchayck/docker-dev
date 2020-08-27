@@ -84,3 +84,13 @@ RUN chmod a+x /opt/irods/*
 EXPOSE 1248 1247 8000
 VOLUME [ "/rules", "/helpers", "/microservices" ]
 ENTRYPOINT [ "/opt/irods/bootstrap.sh" ]
+
+# Temporary build S3 package with new version
+RUN mkdir /tmp/irods-packages && cd /tmp/irods-packages \
+    && wget -nH --cut-dirs=2 --recursive --no-parent -R "index.html*" http://people.renci.org/~jjames/paul/
+
+RUN cd /tmp/irods-packages \
+    && dpkg -i irods-dev_4.2.8~xenial_amd64.deb \
+    && dpkg -i irods-runtime_4.2.8~xenial_amd64.deb \
+    && dpkg -i irods-server_4.2.8~xenial_amd64.deb \
+    && dpkg -i irods-database-plugin-postgres_4.2.8~xenial_amd64.deb
