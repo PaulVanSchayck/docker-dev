@@ -36,6 +36,7 @@ ARG ENV_IRODS_VERSION
 ARG ENV_IRODS_MSI_CURL_VERSION
 ARG ENV_IRODS_EXT_CLANG_VERSION
 ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
+ARG ENV_IRODS_RESC_PLUGIN_S3_VERSION
 ENV IRODS_VERSION ${ENV_IRODS_VERSION}
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key add - \
     && echo "deb [arch=amd64] https://packages.irods.org/apt/ xenial main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
@@ -48,7 +49,7 @@ RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key a
     irods-microservice-plugins-curl=${ENV_IRODS_MSI_CURL_VERSION} \
     # packages required for building microservices
     irods-externals-clang-runtime${ENV_IRODS_EXT_CLANG_RUNTIME_VERSION} \
-    irods-externals-clang${ENV_IRODS_EXT_CLANG_VERSION}
+    irods-externals-clang${ENV_IRODS_EXT_CLANG_VERSION} \
     # packages required for S3 storage plugin
     irods-resource-plugin-s3=${ENV_IRODS_RESC_PLUGIN_S3_VERSION}
 

@@ -80,6 +80,13 @@ fi
 # Force start of Metalnx RMD
 service rmd restart
 
+# Create S3 secrets file
+touch /var/lib/irods/minio.keypair && chown irods /var/lib/irods/minio.keypair && chmod 400 /var/lib/irods/minio.keypair
+# This a bogus keypair (obviously). The s3 plugin needs it for functioning, but this host will not contact the S3 host
+# because the S3 plugin is running in cacheless_attached mode
+# TODO: Is this sufficient?
+printf "foo\nbar" >  /var/lib/irods/minio.keypair
+
 # logstash
 /etc/init.d/filebeat start
 
