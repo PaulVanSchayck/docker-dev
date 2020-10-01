@@ -592,6 +592,23 @@ services:
     networks:
       default:
       common_default:
+  django-pacman:
+    build: ./externals/dh-django-pacman/
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./externals/dh-django-pacman/:/code
+    ports:
+      - "8000:8000"
+    environment:
+      VIRTUAL_HOST: django.${RIT_ENV}.rit.unimaas.nl
+      VIRTUAL_PORT: 8000
+    networks:
+      default:
+        aliases:
+          - django.dh.local
+      common_default:
+        aliases:
+          - django.dh.local
 
 networks:
   common_default:
