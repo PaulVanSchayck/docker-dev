@@ -47,7 +47,8 @@ externals/epicpid-microservice https://github.com/MaastrichtUniversity/epicpid-m
 externals/dh-rdm-service-docker https://github.com/MaastrichtUniversity/dh-rdm-service-docker.git
 externals/mirthconnect-docker https://github.com/MaastrichtUniversity/mirthconnect-docker.git
 externals/irods-open-access-repo https://github.com/MaastrichtUniversity/irods-open-access-repo.git
-externals/sram-sync https://github.com/MaastrichtUniversity/sram-sync.git"
+externals/sram-sync https://github.com/MaastrichtUniversity/sram-sync.git
+externals/dh-django-pacman https://github.com/MaastrichtUniversity/dh-django-pacman"
 
 
 # do the required action in case of externals or exec
