@@ -594,6 +594,8 @@ services:
       common_default:
   django-pacman:
     build: ./externals/dh-django-pacman/
+    depends_on:
+      - django-db
     # Use this command to get the django logs
 #    command: python manage.py runserver 0.0.0.0:8000
     command: gunicorn pacman.wsgi:application --bind 0.0.0.0:8000
@@ -608,6 +610,12 @@ services:
       DH_MAILER_TO_ADDRESS: m.coonen@maastrichtuniversity.nl
       DH_MAILER_USERNAME: user
       DH_MAILER_PASSWORD: password
+      SQL_ENGINE: django.db.backends.postgresql
+      SQL_DATABASE: pacman_django_dev
+      SQL_USER: pacman_django
+      SQL_PASSWORD: pacman_django
+      SQL_HOST: django-db
+      SQL_PORT: 5432
     networks:
       default:
         aliases:
@@ -615,6 +623,21 @@ services:
       common_default:
         aliases:
           - django.dh.local
+  django-db:
+    image: postgres:12.0-alpine
+    environment:
+      POSTGRES_USER: pacman_django
+      POSTGRES_PASSWORD: pacman_django
+      POSTGRES_DB: pacman_django_dev
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      default:
+        aliases:
+          - django-db.dh.local
+      common_default:
+        aliases:
+          - django-db.dh.local
 
 networks:
   common_default:
