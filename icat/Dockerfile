@@ -96,5 +96,15 @@ RUN cd /tmp/irods-packages \
     && dpkg -i irods-dev_4.2.8~xenial_amd64.deb \
     && dpkg -i irods-runtime_4.2.8~xenial_amd64.deb \
     && dpkg -i irods-server_4.2.8~xenial_amd64.deb \
-    && dpkg -i irods-database-plugin-postgres_4.2.8~xenial_amd64.deb \
+    && dpkg -i irods-database-plugin-postgres_4.2.8~xenial_amd64.deb
+
+RUN cd /tmp/irods-packages \
+    && rm irods-resource-plugin-s3_4.2.8.0~xenial_amd64.deb \
+    && wget http://people.renci.org/~jjames/paul_20200928/irods-resource-plugin-s3_4.2.8.0~xenial_amd64.deb \
+    && wget http://people.renci.org/~jjames/paul_20200928/libs3.so
+
+RUN cd /tmp/irods-packages \
+    && apt-get install irods-externals-libs359b62371-0 \
     && dpkg -i irods-resource-plugin-s3_4.2.8.0~xenial_amd64.deb
+
+RUN cp /tmp/irods-packages/libs3.so /usr/lib/libs3.so.2
