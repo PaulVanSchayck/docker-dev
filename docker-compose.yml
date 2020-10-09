@@ -597,8 +597,8 @@ services:
     depends_on:
       - django-db
     # Use this command to get the django logs
-#    command: python manage.py runserver 0.0.0.0:8000
-    command: gunicorn pacman.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
+#    command: gunicorn pacman.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./externals/dh-django-pacman/:/code
     ports:
@@ -606,6 +606,7 @@ services:
     environment:
       VIRTUAL_HOST: django.${RIT_ENV}.rit.unimaas.nl
       VIRTUAL_PORT: 8000
+      RIT_ENV: ${RIT_ENV}
       DH_MAILER_HOST: mailer.dh.local
       DH_MAILER_TO_ADDRESS: m.coonen@maastrichtuniversity.nl
       DH_MAILER_USERNAME: user
