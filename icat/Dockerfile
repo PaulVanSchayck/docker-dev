@@ -100,8 +100,8 @@ RUN cd /tmp/irods-packages \
 
 RUN cd /tmp/irods-packages \
     && rm irods-resource-plugin-s3_4.2.8.0~xenial_amd64.deb \
-    && wget http://people.renci.org/~jjames/paul_20200928/irods-resource-plugin-s3_4.2.8.0~xenial_amd64.deb \
-    && wget http://people.renci.org/~jjames/paul_20200928/libs3.so
+    && wget http://people.renci.org/~jjames/paul_20201028/irods-resource-plugin-s3_4.2.8.0~xenial_amd64.deb \
+    && wget http://people.renci.org/~jjames/paul_20201028/libs3.so
 
 RUN cd /tmp/irods-packages \
     && apt-get install irods-externals-libs359b62371-0 \
