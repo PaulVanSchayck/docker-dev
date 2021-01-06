@@ -104,6 +104,11 @@ if [[ $1 == "create-project-collections" ]]; then
     exit 0
 fi
 
+if [[ $1 == "login" ]]; then
+    source './.env'
+    docker login $ENV_REGISTRY_HOST
+    exit 0
+fi
 
 # set RIT_ENV if not set already
 env_selector

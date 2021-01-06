@@ -16,6 +16,7 @@ services:
         - ENV_SIMPLESAML_HASH
         - ENV_FILEBEAT_VERSION
         - ENV_HTTP_PROXY
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/pacman:${ENV_TAG}
     depends_on:
       - irods
       - ires
@@ -44,7 +45,6 @@ services:
       PACMAN_ENABLE_MAINTENANCE_BANNER: "false"
       PACMAN_MAINTENANCE_BANNER_TEXT: "On Tuesday 10-10-2019 there will be maintenance on The ingest zones. It will not be available from 19:00 to max. 22:00"
       PACMAN_CHANGE_AVU_WHITELIST: "enableArchive,enableOpenAccessExport"
-      IRODS_FRONTEND_ENV_VIRTUAL_HOST: frontend.${RIT_ENV}.rit.unimaas.nl
       IRODS_WEBDAV_ENV_VIRTUAL_HOST: webdav.${RIT_ENV}.rit.unimaas.nl
       IRODS_HOST: irods.dh.local
       IRODS_ENV_RODS_PASSWORD: irods
@@ -59,6 +59,12 @@ services:
       DRUPAL_BASE_URL: http://pacman.{RIT_ENV}.rit.unimaas.nl
       SIMPLESAMLPHP_PASSWORD: password
       SIMPLESAMLPHP_SALT: 04ewyapckg6lj4wn7emchwu8kojtjaoh
+      SAML_IDP_METADATA_URL: 'not_used_in_dev'
+      SAML_IDP_METADATA_FINGERPRINT: 'not_used_in_dev'
+      SAML_IDP_ENTITY_ID: 'not_used_in_dev'
+      SAML_DRUPAL_USERNAME_ATTR: 'username'
+      SAML_DRUPAL_UNIQUE_ID_ATTR: 'username'
+      SAML_DRUPAL_MAIL_ATTR: 'email'
       DATAVERSE_ENDPOINT: https://demo.dataverse.nl/
       DATAVERSE_TREE_ROOT_ID: maastricht
       DATAVERSE_TREE_TITLE_FILTER: "DataHub;Maastricht UMC+;Faculty of Health, Medicine and Life Sciences;MERLN"
@@ -130,6 +136,7 @@ services:
         - ENV_IRODS_EXT_CLANG_VERSION
         - ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
         - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/irods:${ENV_TAG}
     depends_on:
       - irods-db
       - mirthconnect
@@ -168,6 +175,7 @@ services:
         - ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
         - ENV_DOCKERIZE_VERSION
         - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/ires:${ENV_TAG}
     depends_on:
       - irods
     hostname: ires
@@ -204,6 +212,7 @@ services:
         - ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
         - ENV_DOCKERIZE_VERSION
         - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/ires-centos:${ENV_TAG}
     depends_on:
       - irods
     hostname: ires-centos
@@ -241,6 +250,7 @@ services:
         - ENV_IRODS_RESC_PLUGIN_S3_VERSION
         - ENV_DOCKERIZE_VERSION
         - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/ires-s3:${ENV_TAG}
     depends_on:
       - irods
       - ires  # Because of ingest resource
@@ -281,6 +291,7 @@ services:
         - ENV_IRODS_RESC_PLUGIN_S3_VERSION
         - ENV_DOCKERIZE_VERSION
         - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/ires-s3:${ENV_TAG}
     depends_on:
       - irods
       - ires  # Because of ingest resource
@@ -346,8 +357,8 @@ services:
       context: externals/irods-frontend/
       args:
         - ENV_IRODS_REST_VERSION
-        - ENV_CLOUDBROWSER_VERSION
         - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/irods-frontend:${ENV_TAG}
     hostname: irods-frontend
     environment:
       VIRTUAL_HOST: frontend.${RIT_ENV}.rit.unimaas.nl
@@ -369,11 +380,13 @@ services:
       args:
         - ENV_DAVRODS_IRODS_VERSION
         - ENV_DAVRODS_VERSION
+        - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/davrods:${ENV_TAG}
     depends_on:
       - irods
     environment:
       VIRTUAL_HOST: webdav.${RIT_ENV}.rit.unimaas.nl
-      LOGSTASH_TAGS: DAVRODS
+      LOGSPOUT: ignore
     networks:
       default:
         aliases:
@@ -385,6 +398,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
   metalnx:
     build: externals/rit-metalnx-web/
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/metalnx:${ENV_TAG}
     depends_on:
       - irods
     hostname: metalnx
@@ -412,6 +426,7 @@ services:
       args:
         - ENV_MIRTH_CONNECT_VERSION
         - ENV_FILEBEAT_VERSION
+    image:  ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/mirthconnect:${ENV_TAG}
     depends_on:
       - mirth-db
       - epicpid
@@ -466,6 +481,7 @@ services:
           - mirth-db.dh.local
   crossref-lookup:
     build: externals/crossref-lookup
+    image: ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/crossref-lookup:${ENV_TAG}
     environment:
       VIRTUAL_HOST: crossref-lookup.${RIT_ENV}.rit.unimaas.nl
       LOGSTASH_TAGS: CROSSREF_LOOKUP
@@ -481,6 +497,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
   epicpid:
     build: externals/epicpid-microservice/docker
+    image: ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/epicpid:${ENV_TAG}
     environment:
       VIRTUAL_HOST: epicpid.${RIT_ENV}.rit.unimaas.nl
       LOGSTASH_TAGS: EPIC_PID
@@ -535,6 +552,7 @@ services:
           - minio2.dh.local
   open-access-worker:
     build: externals/irods-open-access-repo/docker
+    image: ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/open-access-worker:${ENV_TAG}
 #    depends_on:
 #      - irods
     env_file:
@@ -564,6 +582,7 @@ services:
           - open-access-worker.dh.local
   sram-sync:
     build: externals/sram-sync/
+    image: ${ENV_REGISTRY_HOST}/docker-dev/${ENV_BRANCH}/sram-sync:${ENV_TAG}
     depends_on:
       - irods
       - ldap
