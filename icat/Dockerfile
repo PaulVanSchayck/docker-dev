@@ -33,6 +33,7 @@ RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/a
     # packages required for building ruleset and microservices {{
     libssl-dev \
     libcurl4-openssl-dev \
+    libjansson-dev \
     g++ \
     make \
     cmake \
@@ -63,7 +64,7 @@ RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add - 
     irods-externals-clang-runtime${ENV_IRODS_EXT_CLANG_RUNTIME_VERSION} \
     irods-externals-clang${ENV_IRODS_EXT_CLANG_VERSION} \
     # packages required for python rule engine
-    irods-rule-engine-plugin-python=${IRODS_VERSION}
+    irods-rule-engine-plugin-python=${IRODS_VERSION}.0
 
 # install Metalnx RMD
 ADD ./emc-metalnx-rmd-1.0-1.deb /tmp/emc-metalnx-rmd-1.0-1.deb
