@@ -32,7 +32,6 @@ RUN yum install -y \
     # packages required for building ruleset and microservices {{
     openssl-devel \
     libcurl-devel \
-    jansson-devel \
     gcc-c++ \
     make \
     rpm-build \
@@ -46,6 +45,8 @@ ARG ENV_IRODS_VERSION
 ARG ENV_IRODS_MSI_CURL_VERSION
 ARG ENV_IRODS_EXT_CLANG_VERSION
 ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
+ARG ENV_IRODS_EXT_JANSSON_VERSION
+ARG ENV_IRODS_RE_PLUGIN_PYTHON_VERSION
 ENV IRODS_VERSION ${ENV_IRODS_VERSION}
 RUN rpm --import https://packages.irods.org/irods-signing-key.asc \
     && wget -qO - https://packages.irods.org/renci-irods.yum.repo | sudo tee /etc/yum.repos.d/renci-irods.yum.repo \
@@ -56,8 +57,10 @@ RUN rpm --import https://packages.irods.org/irods-signing-key.asc \
     # packages required for building microservices
     irods-externals-clang-runtime${ENV_IRODS_EXT_CLANG_RUNTIME_VERSION} \
     irods-externals-clang${ENV_IRODS_EXT_CLANG_VERSION} \
+#    irods-externals-jansson${ENV_IRODS_EXT_JANSSON_VERSION} \
+    jansson-devel \
     # packages required for python rule engine
-    irods-rule-engine-plugin-python-${IRODS_VERSION}
+    irods-rule-engine-plugin-python-${ENV_IRODS_RE_PLUGIN_PYTHON_VERSION}
 
 # install Metalnx RMD
 # Installation of rpm tries to start the rmd service, which causes D-Bus errors to appear. These can be safely ignored

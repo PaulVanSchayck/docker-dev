@@ -25,7 +25,6 @@ RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/a
     # packages required for building ruleset and microservices {{
     libssl-dev \
     libcurl4-openssl-dev \
-    libjansson-dev \
     g++ \
     make \
     cmake \
@@ -46,6 +45,8 @@ ARG ENV_IRODS_VERSION
 ARG ENV_IRODS_MSI_CURL_VERSION
 ARG ENV_IRODS_EXT_CLANG_VERSION
 ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
+ARG ENV_IRODS_EXT_JANSSON_VERSION
+ARG ENV_IRODS_RE_PLUGIN_PYTHON_VERSION
 ENV IRODS_VERSION ${ENV_IRODS_VERSION}
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add - \
     && echo "deb [arch=amd64] https://packages.irods.org/apt/ xenial main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
@@ -60,8 +61,10 @@ RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add - 
     # packages required for building microservices
     irods-externals-clang-runtime${ENV_IRODS_EXT_CLANG_RUNTIME_VERSION} \
     irods-externals-clang${ENV_IRODS_EXT_CLANG_VERSION} \
+#    irods-externals-jansson${ENV_IRODS_EXT_JANSSON_VERSION} \
+    libjansson-dev \
     # packages required for python rule engine
-    irods-rule-engine-plugin-python=${IRODS_VERSION}.0
+    irods-rule-engine-plugin-python=${ENV_IRODS_RE_PLUGIN_PYTHON_VERSION}
 
 # install Metalnx RMD
 ADD ./emc-metalnx-rmd-1.0-1.deb /tmp/emc-metalnx-rmd-1.0-1.deb
