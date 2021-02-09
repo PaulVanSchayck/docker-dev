@@ -1,13 +1,5 @@
 FROM ubuntu:16.04
 
-# Load build arguments from environment
-ARG ENV_POSTGRES_VERSION
-ARG ENV_IRODS_VERSION
-ARG ENV_IRODS_MSI_CURL_VERSION
-ARG ENV_IRODS_EXT_CLANG_VERSION
-ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
-ARG ENV_FILEBEAT_VERSION
-
 # Use apt-get NL mirrors and install packages
 RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/apt/sources.list && \
     apt-get update && \
@@ -41,6 +33,7 @@ RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/a
     # }} end
 
 # Make sure to use the same postgres version for client and irods-db server
+ARG ENV_POSTGRES_VERSION
 RUN wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && echo 'deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main' | sudo tee /etc/apt/sources.list.d/pgdg.list \
     && apt-get update \
@@ -49,6 +42,10 @@ RUN wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add 
     odbc-postgresql
 
 # install iRODS
+ARG ENV_IRODS_VERSION
+ARG ENV_IRODS_MSI_CURL_VERSION
+ARG ENV_IRODS_EXT_CLANG_VERSION
+ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
 ENV IRODS_VERSION ${ENV_IRODS_VERSION}
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add - \
     && echo "deb [arch=amd64] https://packages.irods.org/apt/ xenial main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
@@ -71,6 +68,7 @@ ADD ./emc-metalnx-rmd-1.0-1.deb /tmp/emc-metalnx-rmd-1.0-1.deb
 RUN dpkg -i /tmp/emc-metalnx-rmd-1.0-1.deb
 
 # Filebeat
+ARG ENV_FILEBEAT_VERSION
 RUN wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${ENV_FILEBEAT_VERSION}-amd64.deb -O /tmp/filebeat.deb \
  && dpkg -i /tmp/filebeat.deb
 ADD filebeat.yml /etc/filebeat/filebeat.yml

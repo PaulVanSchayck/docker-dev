@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-ARG ENV_IRODS_VERSION
-
 # Use apt-get NL mirrors and install packages
 RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/apt/sources.list && \
     apt-get update && \
@@ -11,6 +9,7 @@ RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/a
     libxml2
 
 # install iRODS icommands
+ARG ENV_IRODS_VERSION
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add - \
     && echo "deb [arch=amd64] https://packages.irods.org/apt/ xenial main" | tee /etc/apt/sources.list.d/renci-irods.list \
     && apt-get update \

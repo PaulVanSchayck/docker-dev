@@ -1,11 +1,8 @@
 FROM centos:7
 
 # Load build arguments from environment
-ARG ENV_IRODS_VERSION
-ARG ENV_IRODS_MSI_CURL_VERSION
-ARG ENV_IRODS_EXT_CLANG_VERSION
-ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
-ARG ENV_DOCKERIZE_VERSION
+
+
 ARG ENV_FILEBEAT_VERSION
 
 RUN yum install -y \
@@ -35,6 +32,7 @@ RUN yum install -y \
     # packages required for building ruleset and microservices {{
     openssl-devel \
     libcurl-devel \
+    jansson-devel \
     gcc-c++ \
     make \
     rpm-build \
@@ -43,9 +41,12 @@ RUN yum install -y \
     # }} end
 
 
-ENV IRODS_VERSION ${ENV_IRODS_VERSION}
-
 # install iRODS
+ARG ENV_IRODS_VERSION
+ARG ENV_IRODS_MSI_CURL_VERSION
+ARG ENV_IRODS_EXT_CLANG_VERSION
+ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
+ENV IRODS_VERSION ${ENV_IRODS_VERSION}
 RUN rpm --import https://packages.irods.org/irods-signing-key.asc \
     && wget -qO - https://packages.irods.org/renci-irods.yum.repo | sudo tee /etc/yum.repos.d/renci-irods.yum.repo \
     && yum install -y \
@@ -75,6 +76,7 @@ ADD filebeat.yml /etc/filebeat/filebeat.yml
 RUN chmod go-w /etc/filebeat/filebeat.yml
 
 # Dockerize
+ARG ENV_DOCKERIZE_VERSION
 RUN curl -fSL https://github.com/jwilder/dockerize/releases/download/${ENV_DOCKERIZE_VERSION}/dockerize-linux-amd64-${ENV_DOCKERIZE_VERSION}.tar.gz -o dockerize-linux-amd64-${ENV_DOCKERIZE_VERSION}.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-${ENV_DOCKERIZE_VERSION}.tar.gz
 

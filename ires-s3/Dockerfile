@@ -1,14 +1,5 @@
 FROM ubuntu:16.04
 
-# Load build arguments from environment
-ARG ENV_IRODS_VERSION
-ARG ENV_IRODS_MSI_CURL_VERSION
-ARG ENV_IRODS_EXT_CLANG_VERSION
-ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
-ARG ENV_IRODS_RESC_PLUGIN_S3_VERSION
-ARG ENV_DOCKERIZE_VERSION
-ARG ENV_FILEBEAT_VERSION
-
 # Use apt-get NL mirrors and install packages
 RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/apt/sources.list && \
     apt-get update && \
@@ -42,6 +33,7 @@ RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/a
     libc++-dev \
     # packages required for building ruleset and microservices {{
     libssl-dev \
+    libjansson-dev \
     g++ \
     make \
     cmake \
@@ -49,9 +41,13 @@ RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/a
     python-pip
     # }} end
 
-ENV IRODS_VERSION ${ENV_IRODS_VERSION}
-
 # install iRODS
+ARG ENV_IRODS_VERSION
+ARG ENV_IRODS_MSI_CURL_VERSION
+ARG ENV_IRODS_EXT_CLANG_VERSION
+ARG ENV_IRODS_EXT_CLANG_RUNTIME_VERSION
+ARG ENV_IRODS_RESC_PLUGIN_S3_VERSION
+ENV IRODS_VERSION ${ENV_IRODS_VERSION}
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key add - \
     && echo "deb [arch=amd64] https://packages.irods.org/apt/ xenial main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
     && apt-get update \
@@ -74,6 +70,7 @@ ADD ./emc-metalnx-rmd-1.0-1.deb /tmp/emc-metalnx-rmd-1.0-1.deb
 RUN dpkg -i /tmp/emc-metalnx-rmd-1.0-1.deb
 
 # Filebeat
+ARG ENV_FILEBEAT_VERSION
 RUN wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${ENV_FILEBEAT_VERSION}-amd64.deb -O /tmp/filebeat.deb \
  && dpkg -i /tmp/filebeat.deb
 ADD filebeat.yml /etc/filebeat/filebeat.yml
@@ -81,6 +78,7 @@ RUN chmod go-w /etc/filebeat/filebeat.yml
 
 
 # Dockerize
+ARG ENV_DOCKERIZE_VERSION
 RUN curl -fSL https://github.com/jwilder/dockerize/releases/download/${ENV_DOCKERIZE_VERSION}/dockerize-linux-amd64-${ENV_DOCKERIZE_VERSION}.tar.gz -o dockerize-linux-amd64-${ENV_DOCKERIZE_VERSION}.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-${ENV_DOCKERIZE_VERSION}.tar.gz
 
