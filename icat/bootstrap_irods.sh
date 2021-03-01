@@ -143,7 +143,7 @@ imeta add -C /nlmumc/projects/P000000010 resource replRescAZM01
 imeta add -C /nlmumc/projects/P000000010 responsibleCostCenter AZM-123456
 imeta add -C /nlmumc/projects/P000000010 storageQuotaGb 10
 imeta add -C /nlmumc/projects/P000000010 title "(MDL) Placeholder project"
-irule -F /rules/projectCollection/createProjectCollection.r "*project='P000000010'" "*title='(MDL) Placeholder collection'"
+irule -r irods_rule_engine_plugin-irods_rule_language-instance -F /rules/projectCollection/createProjectCollection.r "*project='P000000010'" "*title='(MDL) Placeholder collection'"
 ichmod -r own "psuppers" /nlmumc/projects/P000000010
 # Data Steward gets manager rights
 ichmod -r own "opalmen" /nlmumc/projects/P000000010
@@ -165,7 +165,7 @@ imeta add -C /nlmumc/projects/P000000011 resource replRescAZM01
 imeta add -C /nlmumc/projects/P000000011 responsibleCostCenter AZM-123456
 imeta add -C /nlmumc/projects/P000000011 storageQuotaGb 10
 imeta add -C /nlmumc/projects/P000000011 title "(HVC) Placeholder project"
-irule -F /rules/projectCollection/createProjectCollection.r "*project='P000000011'" "*title='(HVC) Placeholder collection'"
+irule -r irods_rule_engine_plugin-irods_rule_language-instance -F /rules/projectCollection/createProjectCollection.r "*project='P000000011'" "*title='(HVC) Placeholder collection'"
 ichmod -r own "psuppers" /nlmumc/projects/P000000011
 # Data Steward gets manager rights
 ichmod -r own "opalmen" /nlmumc/projects/P000000011
